@@ -31,18 +31,14 @@ namespace MySteps
 
         private void OnPtClicked(object sender, EventArgs e)
         {
-            // var languages = new List<string>() { "en", "pt" };
-            // var culture = resourceManager.CurrentCulture;
-            // var index = languages.IndexOf("pt");
-            _resourceManager.CurrentCulture = new CultureInfo("pt");
+            if (_resourceManager.CurrentCulture.TwoLetterISOLanguageName != "pt")
+                _resourceManager.CurrentCulture = new CultureInfo("pt");
         }
 
         private void OnEnClicked(object sender, EventArgs e)
         {
-            // var languages = new List<string>() { "en", "pt" };
-            // var culture = resourceManager.CurrentCulture;
-            // var index = languages.IndexOf("pt");
-            _resourceManager.CurrentCulture = new CultureInfo("en");
+            if (_resourceManager.CurrentCulture.TwoLetterISOLanguageName != "en")
+                _resourceManager.CurrentCulture = new CultureInfo("en");
         }
     }
 }
