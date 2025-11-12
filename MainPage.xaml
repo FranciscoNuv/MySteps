@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localization="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="MySteps.MainPage">
 
     <ScrollView>
@@ -12,7 +13,10 @@
                 HeightRequest="185"
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a hovercraft number nine" />
-
+            <Label Text="{localization:Translate AppName}" TextColor="Azure" />
+            <Label Text="{localization:Translate Warmup}" TextColor="Azure" />
+            <Button Text="Português" Clicked="OnPtClicked" />
+            <Button Text="English" Clicked="OnEnClicked" />
             <Label
                 Text="Hello, World!"
                 Style="{StaticResource Headline}"
