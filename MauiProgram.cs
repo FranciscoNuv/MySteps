@@ -1,7 +1,8 @@
 ﻿﻿using LocalizationResourceManager.Maui;
 using MySteps.Resources;
+using MySteps.Helpers;
 using Microsoft.Extensions.Logging;
-
+using MySteps.Repositories;
 namespace MySteps
 {
     public static class MauiProgram
@@ -22,6 +23,10 @@ namespace MySteps
                     settings.RestoreLatestCulture(true);
                 });
                 
+                
+            string dbPath = FileAccessHelper.GetLocalFilePath("my_steps.db3");
+            builder.Services.AddSingleton<WalkRepository>(s => ActivatorUtilities.CreateInstance<WalkRepository>(s, dbPath));
+            
             builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG

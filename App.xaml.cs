@@ -1,10 +1,15 @@
-﻿namespace MySteps
+﻿using MySteps.Repositories;
+
+namespace MySteps
 {
     public partial class App : Application
     {
-        public App()
+        public static WalkRepository WalkRepo { get; private set; }
+
+        public App(WalkRepository repo)
         {
             InitializeComponent();
+            WalkRepo = repo;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
