@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MySteps.ViewModels"
+             xmlns:models="clr-namespace:MySteps.Models"
+             xmlns:local="clr-namespace:MySteps"
+             x:Class="MySteps.Views.WalksPage"
+             x:DataType="vm:WalksViewModel"
+             Title="Walks" 
+             BindingContext="{x:Static local:App.MainViewModel}">
+
+        <!-- <Button Text="Import" Command="{Binding ImportWalksCommand, Source={x:Static local:App.MainViewModel}}" CommandParameter="{Binding}" /> -->
+
+        <!-- <CollectionView ItemsSource="{Binding Itens}" >
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:WalkViewModel">
+                    <VerticalStackLayout Padding="8">
+                        <Label Text="{Binding Date}" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate> -->
+
+
+            <ListView ItemsSource="{Binding Itens}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Date}" x:DataType="vm:WalkViewModel">
+                            <TextCell.ContextActions>
+                                <MenuItem Text="Delete" IsDestructive="True" 
+                                      />
+                            </TextCell.ContextActions>
+                        </TextCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        <!-- </CollectionView> -->
+    
+
+</ContentPage>
