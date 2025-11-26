@@ -5,9 +5,9 @@ namespace MySteps.Views;
 
 public partial class WalkPage : ContentPage
 {
-    public WalkPage()
+    public WalkPage(WalkViewModel viewModel)
     {
-        BindingContext = App.MainViewModel?.SelectedWalk;
         InitializeComponent();
+        BindingContext = viewModel;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using SQLite;
 
@@ -17,7 +18,7 @@ public class Walk
     public String Date { get; set; }
     public DayPeriod DayPeriod { get; set; }
 
-    public int DurationSec { get; set; }
+    public int? DurationSec { get; set; }
     public double DistanceMeters { get; set; }
     public double? Calories { get; set; }
 
@@ -39,15 +40,17 @@ public class Walk
     [Ignore]
     public DateTime DateTimeValue
     {
-        get => DateTime.Parse(Date);
+        get =>  string.IsNullOrWhiteSpace(Date)
+            ? DateTime.MinValue  
+            : DateTime.Parse(Date);
         set => Date = value.ToString("yyyy-MM-dd");
     }
     public string DateFormated => DateTimeValue.ToString("dd/MM/yyyy");
     public DayOfWeek WeekDay => DateTimeValue.DayOfWeek;
     public double DistanceKm => DistanceMeters / 1000;
-    public string Duration => TimeSpan.FromSeconds((long)DurationSec).ToString(@"mm:ss");
-    public string AvgPace => AvgPaceSecPerKm is null ? "00:00" : TimeSpan.FromSeconds((long)AvgPaceSecPerKm).ToString(@"mm:ss");
-    public string MaxPace => MaxPaceSecPerKm is null ? "00:00" :  TimeSpan.FromSeconds((long)MaxPaceSecPerKm).ToString(@"mm:ss");
+    public string Duration => DurationSec is null ? "00:00" : TimeSpan.FromSeconds(Convert.ToDouble(DurationSec)).ToString(@"mm\:ss");
+    public string AvgPace => AvgPaceSecPerKm is null ? "00:00" : TimeSpan.FromSeconds(Convert.ToDouble(AvgPaceSecPerKm)).ToString(@"mm\:ss");
+    public string MaxPace => MaxPaceSecPerKm is null ? "00:00" :  TimeSpan.FromSeconds(Convert.ToDouble(MaxPaceSecPerKm)).ToString(@"mm\:ss");
     public string WarmUp()
     {
         List<string> warmUps = new List<string>();

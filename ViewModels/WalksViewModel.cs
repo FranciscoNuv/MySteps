@@ -32,7 +32,13 @@ public class WalksViewModel: ObservableObject
         Itens.Clear();
         var lis = await _repo.GetAllWalks();
         System.Diagnostics.Debug.WriteLine($"[DEBUG] Walks carregados do DB: {lis.Count}");
-        foreach (var item in lis) Itens.Add(new WalkViewModel(item));
+        foreach (Walk item in lis) Itens.Add(new WalkViewModel(item));
+
+    }
+
+    public async Task<Walk?> GetAsync(int id)
+    {
+        return await _repo.GetWalk(id);
     }
     
     // public async void DeleteWalk(WalkViewModel walk)

@@ -5,7 +5,7 @@ namespace MySteps
 {
     public partial class App : Application
     {
-	public static ViewModels.WalksViewModel? MainViewModel { get; private set; }
+        public static ViewModels.WalksViewModel? MainViewModel { get; private set; }
         public static WalkRepository WalkRepo { get; private set; }
 
         public App(WalkRepository repo)
