@@ -1,4 +1,5 @@
 ﻿﻿using LocalizationResourceManager.Maui;
+using CommunityToolkit.Maui;
 using MySteps.Resources;
 using MySteps.Helpers;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ namespace MySteps
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 })
+                .UseMauiCommunityToolkit()
                 .UseLocalizationResourceManager(settings =>
                 {
                     settings.AddResource(AppResources.ResourceManager);
