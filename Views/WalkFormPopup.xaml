@@ -1,19 +1,86 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <views:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
-             x:Class="MySteps.Views.MyFormPopup"
-             Color="Transparent">
-    
-    <Border BackgroundColor="White" Padding="20" StrokeShape="{RoundRectangle CornerRadius=15}">
-        <VerticalStackLayout Spacing="15" WidthRequest="300">
-            <Label Text="Enter Details" FontSize="Medium" HorizontalOptions="Center" />
+             xmlns:vm="clr-namespace:MySteps.ViewModels"
+             xmlns:local="clr-namespace:MySteps.Behaviors"
+             x:Class="MySteps.Views.WalkFormPopup"
+             x:DataType="vm:WalkViewModel"
+             Color="Transparent"
+             HorizontalOptions="Fill"
+             VerticalOptions="Fill">
+    <views:Popup.Resources>
+         <x:Array x:Key="DayPeriodList" Type="{x:Type x:String}">
+            <x:String>Morning</x:String>
+            <x:String>Afternoon</x:String>
+            <x:String>Evening</x:String>
+        </x:Array>
+    </views:Popup.Resources>
+    <Border Background="#F3FFFFFF" Padding="20" StrokeShape="{RoundRectangle CornerRadius=15}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+        <VerticalStackLayout Spacing="15" >
+            <Label x:Name="ActionLabel" FontSize="Medium" HorizontalOptions="Center" TextColor="Black" />
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+                <Label Text="Date"  TextColor="Black" Grid.Row="0" Grid.Column="0"/>
+                <Label Text="Day Period"  TextColor="Black" Grid.Row="0" Grid.Column="1"/>
+                <Label Text="Duration"  TextColor="Black" Grid.Row="2" Grid.Column="0"/>
+                <Label Text="Distance (km)"  TextColor="Black" Grid.Row="2" Grid.Column="1"/>
+                <Label Text="Max Speed"  TextColor="Black" Grid.Row="4" Grid.Column="0"/>
+                <Label Text="Calories"  TextColor="Black" Grid.Row="4" Grid.Column="1"/>
+
+                <DatePicker Date="{Binding Date}" Background="#1B434343" TextColor="Black" Grid.Row="1" Grid.Column="0"/>
+                
+                <Picker TextColor="Black"  Background="#1B434343" ItemsSource="{StaticResource DayPeriodList}" SelectedItem="{Binding DayPeriod}"  Grid.Row="1" Grid.Column="1" />
+                
+                <Entry Keyboard="Numeric" TextColor="Black"  Background="#1B434343"
+                    Text="{Binding Duration}" Grid.Row="3" Grid.Column="0">
+                    <Entry.Behaviors>
+                        <local:DurationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+
+                <Entry Text="{Binding Distance}"  Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="3" Grid.Column="1">
+                    <Entry.Behaviors>
+                        <local:FloatBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+                <Entry Text="{Binding MaxSpeed}"  Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="5" Grid.Column="0">
+                    <Entry.Behaviors>
+                        <local:FloatBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+                <Entry Text="{Binding Calories}" Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="5" Grid.Column="1">
+                    <Entry.Behaviors>
+                        <local:FloatBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
             
-            <Entry Placeholder="Name" />
-            <Entry Placeholder="Email" Keyboard="Email" />
-            
-            <Button Text="Submit" Clicked="OnSubmitButtonClicked" />
-            <Button Text="Cancel" Clicked="OnCancelButtonClicked" BackgroundColor="Gray" />
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <Label Text="WarmUps"  Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="0"  />
+                
+                <Label Text="Abs"  HorizontalOptions="Center" TextColor="Black" Grid.Row="1" Grid.Column="0"  />
+                <Switch IsToggled="{Binding WarmUpAbs}" Grid.Row="1" Grid.Column="1" />
+
+                
+                <Label Text="Arms"  HorizontalOptions="Center" TextColor="Black" Grid.Row="2" Grid.Column="0"  />
+                <Switch IsToggled="{Binding WarmUpArms}" Grid.Row="2" Grid.Column="1" />
+                
+                <Label Text="Back"  HorizontalOptions="Center" TextColor="Black" Grid.Row="3" Grid.Column="0"  />
+                <Switch IsToggled="{Binding WarmUpBack}" Grid.Row="3" Grid.Column="1" />
+
+                <Label Text="Chest"  HorizontalOptions="Center" TextColor="Black" Grid.Row="4" Grid.Column="0"  />
+                <Switch IsToggled="{Binding WarmUpChest}" Grid.Row="4" Grid.Column="1" />
+                
+                <Label Text="Legs"  HorizontalOptions="Center" TextColor="Black" Grid.Row="5" Grid.Column="0"  />
+                <Switch IsToggled="{Binding WarmUpLegs}" Grid.Row="5" Grid.Column="1" />
+            </Grid>
+            <Grid RowDefinitions="Auto" ColumnDefinitions="*,*">
+                <Button Text="Submit" Clicked="OnSubmitButtonClicked"  Grid.Row="0" Grid.Column="0"/>
+                <Button Text="Cancel" Clicked="OnCancelButtonClicked" BackgroundColor="Gray" Grid.Row="0" Grid.Column="1"/>
+            </Grid>
+
         </VerticalStackLayout>
     </Border>
 </views:Popup>

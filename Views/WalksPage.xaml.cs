@@ -2,6 +2,7 @@ using MySteps.ViewModels;
 using MySteps.Models;
 using System.Windows.Input;
 using System.Runtime.CompilerServices;
+using CommunityToolkit.Maui.Views;
 
 namespace MySteps.Views;
 
@@ -37,7 +38,8 @@ public partial class WalksPage : ContentPage
 
     private async void OnAddClicked(object? sender, EventArgs e)
     {
-        await DisplayAlert("Add", "Add New walk!", "OK");
+        // await DisplayAlert("Add", "Add New walk!", "OK");
+        this.ShowPopup(new WalkFormPopup(new WalkViewModel()));
     }
     private async void OnEditClicked(object? sender, EventArgs e)
     {

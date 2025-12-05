@@ -1,13 +1,17 @@
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Views;
 using System;
 using Microsoft.Maui.Controls;
+using MySteps.ViewModels;
 
 namespace MySteps.Views;
     public partial class WalkFormPopup : Popup
     {
-        public WalkFormPopup()
+        public WalkFormPopup(WalkViewModel? viewModel)
         {
             InitializeComponent();
+            ActionLabel.Text = viewModel.Id is not null ? "Edit":"Add";
+            BindingContext = viewModel;
         }
 
         private void OnSubmitButtonClicked(object sender, EventArgs e)
