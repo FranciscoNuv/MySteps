@@ -29,7 +29,7 @@
                 <Label Text="Max Speed"  TextColor="Black" Grid.Row="4" Grid.Column="0"/>
                 <Label Text="Calories"  TextColor="Black" Grid.Row="4" Grid.Column="1"/>
 
-                <DatePicker Date="{Binding Date}" Background="#1B434343" TextColor="Black" Grid.Row="1" Grid.Column="0"/>
+                <DatePicker Date="{Binding DateTimeValue}" Background="#1B434343" TextColor="Black" Grid.Row="1" Grid.Column="0"/>
                 
                 <Picker TextColor="Black"  Background="#1B434343" ItemsSource="{StaticResource DayPeriodList}" SelectedItem="{Binding DayPeriod}"  Grid.Row="1" Grid.Column="1" />
                 

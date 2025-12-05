@@ -8,6 +8,7 @@ public class FloatBehavior : Behavior<Entry>
     private bool _isUpdating;
     private string _rawDigits = string.Empty;      // só dígitos
     private string _lastFormatted = string.Empty;  // texto formatado anterior
+    private bool _isFirstChange = true;
 
     protected override void OnAttachedTo(Entry entry)
     {
@@ -28,6 +29,29 @@ public class FloatBehavior : Behavior<Entry>
 
         var entry = (Entry)sender;
         var newText = e.NewTextValue ?? string.Empty;
+        var culture = CultureInfo.GetCultureInfo("pt-BR");
+
+        // PRIMEIRA VEZ: tratar como valor vindo do ViewModel (3 -> 3,00; 3,5 -> 3,50; etc.)
+        if (_isFirstChange && !string.IsNullOrWhiteSpace(newText))
+        {
+            _isFirstChange = false;
+
+            if (decimal.TryParse(newText, NumberStyles.Any, culture, out var initialValue))
+            {
+                long cents = (long)Math.Round(initialValue * 100);
+                _rawDigits = Math.Abs(cents).ToString();
+
+                string formattedInit = initialValue.ToString("F2", culture);
+
+                _isUpdating = true;
+                entry.Text = formattedInit;
+                entry.CursorPosition = entry.Text.Length;
+                _isUpdating = false;
+
+                _lastFormatted = formattedInit;
+                return; // não aplica a lógica de digitação aqui
+            }
+        }
 
         // Se apagou tudo, zera tudo
         if (string.IsNullOrEmpty(newText))
@@ -60,7 +84,7 @@ public class FloatBehavior : Behavior<Entry>
             {
                 // Provavelmente backspace/delete
                 if (_rawDigits.Length > 0)
-                    _rawDigits = _rawDigits.Substring(0, _rawDigits.Length - 1);
+                    _rawDigits = _rawDigits[..^1];
             }
             else
             {
@@ -88,7 +112,6 @@ public class FloatBehavior : Behavior<Entry>
                 raw = 0;
 
             decimal value = raw / 100m;
-            var culture = CultureInfo.GetCultureInfo("pt-BR");
 
             // 2 casas decimais, sem separador de milhar; se quiser com milhares, use "N2"
             string formatted = value.ToString("F2", culture);
@@ -96,7 +119,6 @@ public class FloatBehavior : Behavior<Entry>
             _lastFormatted = formatted;
             entry.Text = formatted;
             entry.CursorPosition = entry.Text.Length; // cursor sempre no fim
-
             entry.TextColor = Colors.Black;
         }
         finally

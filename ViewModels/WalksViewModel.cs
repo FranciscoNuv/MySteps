@@ -41,6 +41,16 @@ public class WalksViewModel: ObservableObject
         return await _repo.GetWalk(id);
     }
     
+    public async Task SaveWalk(Walk walk)
+    {
+        if(walk.Id is null)
+        {
+            await _repo.AddNewWalk(walk);
+        } else
+        {
+            await _repo.UpdateWalk(walk);
+        }
+    }
     // public async void DeleteWalk(WalkViewModel walk)
     // {
     //     if (walk.Id is not null)

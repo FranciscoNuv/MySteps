@@ -1,12 +1,18 @@
 using LocalizationResourceManager.Maui.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
+using MySteps.Repositories;
 using MySteps.Models;
+
+using System.Globalization;
 
 namespace MySteps.ViewModels;
 public class WalkViewModel: ObservableObject
 {
+    private Walk? _walk;
     private int? _id = null;
     private string? _date = null;
+    private DateTime? _dateTimeValue = null;
     private DayOfWeek? _weekDay = null;
     private DayPeriod? _dayPeriod = null;
     private string? _duration = null;
@@ -34,6 +40,12 @@ public class WalkViewModel: ObservableObject
     {
         get => _date;
         set => SetProperty(ref _date, value);
+    }
+    
+    public DateTime? DateTimeValue
+    {
+        get => _dateTimeValue;
+        set => SetProperty(ref _dateTimeValue, value);
     }
     public DayOfWeek? WeekDay
     {
@@ -119,13 +131,15 @@ public class WalkViewModel: ObservableObject
     {
         get => _warmUpLegs;
         set => SetProperty(ref _warmUpLegs, value);
-    }
+    } 
     public WalkViewModel(Walk? walk = null)
     {
         if (walk is not null)
         {
+            _walk = walk;
             _id = walk.Id;
             _date = walk.DateFormated;
+            _dateTimeValue = walk.DateTimeValue;
             _weekDay = walk.WeekDay; 
             _dayPeriod = walk.DayPeriod;
             _duration = walk.Duration;
@@ -145,4 +159,72 @@ public class WalkViewModel: ObservableObject
             _warmUp = walk.WarmUp();
         }
     }
+    public Walk GetWalk()
+    {
+        // Se veio um Walk de origem, reaproveita o mesmo objeto
+        var walk = _walk ?? new Walk();
+
+        walk.Id = Id;
+
+        // Data
+        if (DateTimeValue is not null)
+            walk.DateTimeValue = DateTimeValue.Value;
+
+        // Período do dia
+        if (DayPeriod is not null)
+            walk.DayPeriod = DayPeriod.Value;
+
+        // Duração -> segundos
+        if (!string.IsNullOrWhiteSpace(Duration))
+        {
+            var ts = TimeSpan.ParseExact(Duration, @"mm\:ss", CultureInfo.InvariantCulture);
+            walk.DurationSec = (int)ts.TotalSeconds;
+        }
+        else
+        {
+            walk.DurationSec = null;
+        }
+
+        // Distância em km na VM → metros na model
+        walk.DistanceMeters = (Distance ?? 0) * 1000;
+
+        walk.Calories    = Calories;
+        walk.AvgSpeedKmh = AvgSpeed;
+        walk.MaxSpeedKmh = MaxSpeed;
+
+        // Pace médio
+        if (!string.IsNullOrWhiteSpace(AvgPace))
+        {
+            var ts = TimeSpan.ParseExact(AvgPace, @"mm\:ss", CultureInfo.InvariantCulture);
+            walk.AvgPaceSecPerKm = (int)ts.TotalSeconds;
+        }
+        else
+        {
+            walk.AvgPaceSecPerKm = null;
+        }
+
+        // Pace máximo
+        if (!string.IsNullOrWhiteSpace(MaxPace))
+        {
+            var ts = TimeSpan.ParseExact(MaxPace, @"mm\:ss", CultureInfo.InvariantCulture);
+            walk.MaxPaceSecPerKm = (int)ts.TotalSeconds;
+        }
+        else
+        {
+            walk.MaxPaceSecPerKm = null;
+        }
+
+        walk.AvgHrBpm = AvgBpm;
+        walk.MaxHrBpm = MaxBpm;
+
+        // WarmUp (bool? -> bool)
+        walk.WarmUpAbs   = WarmUpAbs   ?? false;
+        walk.WarmUpArms  = WarmUpArms  ?? false;
+        walk.WarmUpBack  = WarmUpBack  ?? false;
+        walk.WarmUpChest = WarmUpChest ?? false;
+        walk.WarmUpLegs  = WarmUpLegs  ?? false;
+        _walk = walk;
+        return walk;
+    }
+
 }

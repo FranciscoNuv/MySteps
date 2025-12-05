@@ -16,11 +16,15 @@ namespace MySteps.Views;
 
         private void OnSubmitButtonClicked(object sender, EventArgs e)
         {
-            // Handle form submission logic here
-            // You can access the Entry fields defined in XAML
-
-            // Close the popup and optionally pass a result back to the main page
-            Close(result: true); 
+            if (BindingContext is WalkViewModel vm)
+            {
+                var walkAtualizado = vm.GetWalk();
+                Close(walkAtualizado);
+            }
+            else
+            {
+                Close(false);
+            }
         }
 
         private void OnCancelButtonClicked(object sender, EventArgs e)

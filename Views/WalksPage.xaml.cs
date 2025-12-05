@@ -39,7 +39,12 @@ public partial class WalksPage : ContentPage
     private async void OnAddClicked(object? sender, EventArgs e)
     {
         // await DisplayAlert("Add", "Add New walk!", "OK");
-        this.ShowPopup(new WalkFormPopup(new WalkViewModel()));
+        var result = await this.ShowPopupAsync(new WalkFormPopup(new WalkViewModel()));
+        if (result is Walk updatedWalk)
+        {
+            await _viewModel.SaveWalk(updatedWalk);
+            reload();
+        }
     }
     private async void OnEditClicked(object? sender, EventArgs e)
     {
@@ -50,7 +55,13 @@ public partial class WalksPage : ContentPage
             if (dataContext != null)
             {
                 _viewModel.SelectedWalk = dataContext;
-                await DisplayAlert("Edit", "Edit walk "+dataContext.Id, "OK");
+                
+                var result = await this.ShowPopupAsync(new WalkFormPopup(dataContext));
+                if (result is Walk updatedWalk)
+                {
+                    await _viewModel.SaveWalk(updatedWalk);
+                    reload();
+                }
             }
         }
     }

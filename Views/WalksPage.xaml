@@ -16,18 +16,19 @@
             <Button Text="Add" HorizontalOptions="Center" FontSize="Small" Clicked="OnAddClicked" Grid.Column="2" />
 
         </Grid>
-        <Grid Grid.Row="1" ColumnDefinitions="45, *, *, *, 45" Padding="5" HeightRequest="50" >
+        <Grid Grid.Row="1" ColumnDefinitions="45, *, *, *, *, 45" Padding="5" HeightRequest="50" >
             <Label  Text="ID" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="0" />
             <Label  Text="Date" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="1" />
             <Label  Text="Duration" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="2" />
-            <Label  Text="Warm Up" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="3" />
-            <Label Text="Actions" HorizontalOptions="Center" HorizontalTextAlignment="Center"  Grid.Column="4" />
+            <Label  Text="Distance" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="3" />
+            <Label  Text="Warm Up" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="4" />
+            <Label Text="Actions" HorizontalOptions="Center" HorizontalTextAlignment="Center"  Grid.Column="5" />
         </Grid>
         
         <CollectionView  x:Name="collectionView" SelectionMode="Single" Grid.Row="2" VerticalOptions="FillAndExpand"  EmptyView="No data available">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:WalkViewModel">
-                    <Grid  ColumnDefinitions="45, *, *, *, 45" Padding="5" HeightRequest="50" >
+                    <Grid  ColumnDefinitions="45, *, *, *, *, 45" Padding="5" HeightRequest="50" >
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnDetailClicked" BindingContext="{Binding .}" NumberOfTapsRequired="1" />
                         </Grid.GestureRecognizers>
@@ -41,7 +42,8 @@
                         <Label  Text="{Binding Id}" HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="0" />
                         <Label  Text="{Binding Date}"  HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="1" />
                         <Label  Text="{Binding Duration}"  HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="2" />
-                        <Label  Text="{Binding WarmUp}"  HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="3" />
+                        <Label  Text="{Binding Distance}"  HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="3" />
+                        <Label  Text="{Binding WarmUp}"  HorizontalOptions="Center" HorizontalTextAlignment="Center" Grid.Column="4" />
                         <!-- <Button Text="Details" HorizontalOptions="Center" FontSize="Small" Clicked="OnDetailClicked" BindingContext="{Binding .}"  Grid.Column="4" /> -->
                     </Grid>                    
                 </DataTemplate>
