@@ -5,125 +5,31 @@ namespace MySteps.Behaviors;
 
 public class FloatBehavior : Behavior<Entry>
 {
-    private bool _isUpdating;
-    private string _rawDigits = string.Empty;      // só dígitos
-    private string _lastFormatted = string.Empty;  // texto formatado anterior
-    private bool _isFirstChange = true;
-
     protected override void OnAttachedTo(Entry entry)
     {
         base.OnAttachedTo(entry);
-        entry.TextChanged += OnTextChanged;
+        // entry.TextChanged += OnTextChanged;
+        entry.Unfocused += OnEntryUnfocused;
     }
 
     protected override void OnDetachingFrom(Entry entry)
     {
         base.OnDetachingFrom(entry);
-        entry.TextChanged -= OnTextChanged;
+        entry.Unfocused -= OnEntryUnfocused;
+        // entry.TextChanged -= OnTextChanged;
     }
 
-    void OnTextChanged(object sender, TextChangedEventArgs e)
+    private void OnEntryUnfocused(object sender, FocusEventArgs e)
     {
-        if (_isUpdating)
-            return;
-
         var entry = (Entry)sender;
-        var newText = e.NewTextValue ?? string.Empty;
-        var culture = CultureInfo.GetCultureInfo("pt-BR");
-
-        // PRIMEIRA VEZ: tratar como valor vindo do ViewModel (3 -> 3,00; 3,5 -> 3,50; etc.)
-        if (_isFirstChange && !string.IsNullOrWhiteSpace(newText))
+        if (float.TryParse(entry.Text, out float value))
         {
-            _isFirstChange = false;
-
-            if (decimal.TryParse(newText, NumberStyles.Any, culture, out var initialValue))
-            {
-                long cents = (long)Math.Round(initialValue * 100);
-                _rawDigits = Math.Abs(cents).ToString();
-
-                string formattedInit = initialValue.ToString("F2", culture);
-
-                _isUpdating = true;
-                entry.Text = formattedInit;
-                entry.CursorPosition = entry.Text.Length;
-                _isUpdating = false;
-
-                _lastFormatted = formattedInit;
-                return; // não aplica a lógica de digitação aqui
-            }
+            entry.Text = value.ToString("F2", System.Globalization.CultureInfo.CurrentCulture);
         }
-
-        // Se apagou tudo, zera tudo
-        if (string.IsNullOrEmpty(newText))
+        else
         {
-            _isUpdating = true;
-            _rawDigits = string.Empty;
-            _lastFormatted = string.Empty;
-            entry.Text = string.Empty;
-            _isUpdating = false;
-            return;
-        }
-
-        _isUpdating = true;
-
-        try
-        {
-            // Detecta se foi adição ou remoção com base no texto anterior formatado
-            if (newText.Length > _lastFormatted.Length)
-            {
-                // Provavelmente adicionou um caractere
-                char addedChar = newText[^1];
-
-                if (char.IsDigit(addedChar))
-                {
-                    _rawDigits += addedChar; // adiciona dígito (inclusive 0!)
-                }
-                // se não for dígito (vírgula, ponto, etc), ignora
-            }
-            else if (newText.Length < _lastFormatted.Length)
-            {
-                // Provavelmente backspace/delete
-                if (_rawDigits.Length > 0)
-                    _rawDigits = _rawDigits[..^1];
-            }
-            else
-            {
-                // Mesmo tamanho (casos estranhos, colar texto, etc) -> recalcula bruto
-                _rawDigits = "";
-                foreach (var c in newText)
-                {
-                    if (char.IsDigit(c))
-                        _rawDigits += c;
-                }
-            }
-
-            if (string.IsNullOrEmpty(_rawDigits))
-            {
-                entry.Text = string.Empty;
-                _lastFormatted = string.Empty;
-                return;
-            }
-
-            // Garante pelo menos 2 dígitos para centavos
-            if (_rawDigits.Length == 1)
-                _rawDigits = "0" + _rawDigits;
-
-            if (!long.TryParse(_rawDigits, out long raw))
-                raw = 0;
-
-            decimal value = raw / 100m;
-
-            // 2 casas decimais, sem separador de milhar; se quiser com milhares, use "N2"
-            string formatted = value.ToString("F2", culture);
-
-            _lastFormatted = formatted;
-            entry.Text = formatted;
-            entry.CursorPosition = entry.Text.Length; // cursor sempre no fim
-            entry.TextColor = Colors.Black;
-        }
-        finally
-        {
-            _isUpdating = false;
+            entry.Text = "0,00";
         }
     }
+
 }

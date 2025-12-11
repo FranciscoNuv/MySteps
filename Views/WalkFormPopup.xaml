@@ -40,17 +40,17 @@
                     </Entry.Behaviors>
                 </Entry>
 
-                <Entry Text="{Binding Distance}"  Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="3" Grid.Column="1">
+                <Entry Text="{Binding Distance, StringFormat='{0:F2}'}"  Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="3" Grid.Column="1">
                     <Entry.Behaviors>
                         <local:FloatBehavior />
                     </Entry.Behaviors>
                 </Entry>
-                <Entry Text="{Binding MaxSpeed}"  Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="5" Grid.Column="0">
+                <Entry Text="{Binding MaxSpeed, StringFormat='{0:F2}'}"  Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="5" Grid.Column="0">
                     <Entry.Behaviors>
                         <local:FloatBehavior />
                     </Entry.Behaviors>
                 </Entry>
-                <Entry Text="{Binding Calories}" Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="5" Grid.Column="1">
+                <Entry Text="{Binding Calories, StringFormat='{0:F2}'}" Background="#1B434343" TextColor="Black" Keyboard="Numeric" Grid.Row="5" Grid.Column="1">
                     <Entry.Behaviors>
                         <local:FloatBehavior />
                     </Entry.Behaviors>

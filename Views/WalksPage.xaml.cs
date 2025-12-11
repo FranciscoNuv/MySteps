@@ -74,7 +74,21 @@ public partial class WalksPage : ContentPage
             if (dataContext != null)
             {
                 _viewModel.SelectedWalk = dataContext;
-                await DisplayAlert("Delete", "Delete walk "+dataContext.Id, "OK");
+                string newText = "10,30";
+                var digits = new string(newText.Where(dig => char.IsDigit(dig) || dig=='0' || dig==0 ).ToArray()).TrimStart('0');
+                string digitsStr = digits.Substring(digits.Length - 2, 2);
+                string intStr = digits.Substring(0, digits.Length - 2);
+                intStr = intStr.TrimStart('0');
+                if (int.TryParse(digitsStr, out int dig))
+                {
+                    digitsStr = dig.ToString("00");
+                }
+                else
+                {
+                    digitsStr = "00";
+                }
+                var formatted = $"{intStr},{digitsStr}";
+                await DisplayAlert("Delete", "Test { "+string.Join("|", digits)+","+digitsStr+","+intStr+", - "+formatted+"  }Delete walk "+dataContext.Id, "OK");
             }
         }
     }
